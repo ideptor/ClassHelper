@@ -1,0 +1,4 @@
+국어,http://www.google.com
+영어,zoom url 2
+도덕,zoom url 2
+컴터,http://www.naver.com
