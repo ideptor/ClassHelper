@@ -15,7 +15,6 @@ class Alarm(threading.Thread):
     ALARM_INTERVAL = 0.6
     
     ALARM_DURATUIN_SEC = 5 * 60
-    
 
     def __init__(self, label, index, enabled_list, start_time):
         super().__init__()
@@ -49,8 +48,8 @@ class Alarm(threading.Thread):
                 self.label.config(bg=cur_col)
 
             else:
-                cur_col = Alarm.DEFAULT_COLOR
-                self.label.config(bg=cur_col)
+                #cur_col = Alarm.DEFAULT_COLOR
+                self.label.config(bg=Alarm.DEFAULT_COLOR)
 
             time.sleep(Alarm.ALARM_INTERVAL)
 
@@ -59,8 +58,17 @@ class Main(Frame):
     D_FONT = ('돋움',11)
     PADX = 5
     PADY = 5
+
+    WEEKDAY_LIST = ['월','화','수','목','금']
+
+    def __init__(self, master=None):
+        Frame.__init__(self, master)
+        self.master = master
+        self.add_clock_section()
+        
+        self.add_alarm_section(Main.WEEKDAY_LIST[datetime.datetime.now().weekday()])
     
-    def add_clock(self):
+    def add_clock_section(self):
         self.clock = Label(self.master, text="", fg="Red", font=("Helvetica", 18))
         self.clock.grid(column=0, row=0)
         self.update_clock()
@@ -70,13 +78,8 @@ class Main(Frame):
         self.clock.configure(text=now)
         self.after(900, self.update_clock)
 
-    def __init__(self, master=None):
-        Frame.__init__(self, master)
-        self.master = master
-        self.add_clock()
-        self.add_alarm_section()
 
-    def add_alarm_section(self):        
+    def add_alarm_section(self, week_day):        
         self.time_table_dict = loader.load_time_table()
 
         self.period_dict = loader.load_time_slot()
@@ -86,7 +89,7 @@ class Main(Frame):
         print(self.zoom_url_dict)
 
         self.enabled_list = []
-        self.add_alarms('월')
+        self.add_alarms(week_day)
 
     
     def add_alarms(self, week_day):
