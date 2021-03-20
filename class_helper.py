@@ -59,7 +59,7 @@ class Main(Frame):
     PADX = 5
     PADY = 5
 
-    WEEKDAY_LIST = ['월','화','수','목','금']
+    WEEKDAY_LIST = ['월','화','수','목','금', '토', '일']
 
     def __init__(self, master=None):
         Frame.__init__(self, master)
@@ -94,36 +94,72 @@ class Main(Frame):
     
     def add_alarms(self, week_day):
 
+        if week_day not in self.time_table_dict:
+            label = Label(self.master, text=f'{week_day}요일 에는 수업이 없습니다.', 
+                anchor='w', relief='ridge', width=40, height=2, font=Main.D_FONT)
+            label.grid(column=0, row=1, pady=Main.PADY, padx=Main.PADX)
+            return
+
         subject_list = self.time_table_dict[week_day]
-        offset_row = 0
-        period = 0
         self.enabled_list = [True for i in range(len(subject_list)+2)]
 
+        # 조회
+        period = 0
+        start_time, end_time, url, cont = self.extract_period_info(period, "조회")
+        text = self.make_label_text(0, start_time, end_time, "조회", cont)
+        self.create_label_and_button(text, url, period+1, period, start_time)
+
+        # 종례
+        period = len(subject_list) + 1
+        start_time, end_time, url, cont = self.extract_period_info(period, "종례")
+        text = self.make_label_text(period, start_time, end_time, "종례", cont)
+        self.create_label_and_button(text, url, period+1, period, start_time)
+        
+        period = 1
+        row = 2
+        #            if period == 0:
+        #        text = f'조회 {start_time}~{end_time} 조회 ({cont})'
+        #    else:
+
         for subject in subject_list:
+
+            start_time, end_time, url, cont = self.extract_period_info(period, subject)
+
+            text = self.make_label_text(period, start_time, end_time, subject, cont)
+            self.create_label_and_button(text, url, row, period, start_time)
+            row += 1
             period += 1
-            start_time = self.period_dict[f'{period}'][0]
-            end_time = self.period_dict[f'{period}'][1]
-            if subject in self.zoom_url_dict.keys():
-                url = self.zoom_url_dict[subject]
-                cont = 'Zoom수업'
-            else:
-                url = None
-                cont = "Contents수업"
-
-            label = Label(self.master, text=f'{period}교시 {start_time}~{end_time} {subject} ({cont})', 
-                anchor='w', relief='ridge', width=40, height=2, font=Main.D_FONT)
-            label.grid(column=0, row=offset_row+period, pady=Main.PADY, padx=Main.PADX)
-            alarm = Alarm(label, period, self.enabled_list, start_time)
-            alarm.start()
-
-            btn_stop_alarm = Button(self.master, text='Stop', font=Main.D_FONT,
-                width=5, height=2, command = partial(self.clicked_btn_stop_alarm, period, self.enabled_list))
-            btn_stop_alarm.grid(column=1, row=offset_row+period, pady=Main.PADY, padx=Main.PADX)
-
-            btn_open_zoom = Button(self.master, text='Open', font=Main.D_FONT,
-                width=5, height=2, command = partial(self.clicked_btn_open_zoom, url))
-            btn_open_zoom.grid(column=2, row=offset_row+period, pady=Main.PADY, padx=Main.PADX)
             
+    def make_label_text(self, period, start_time, end_time, subject, cont):
+        return f'{period}교시 {start_time}~{end_time} {subject} ({cont})'
+
+    def extract_period_info(self, period, subject):
+        start_time = self.period_dict[f'{period}'][0]
+        end_time = self.period_dict[f'{period}'][1]
+        if subject in self.zoom_url_dict.keys():
+            url = self.zoom_url_dict[subject]
+            cont = 'Zoom수업'
+        else:
+            url = None
+            cont = "Contents수업"
+
+        return (start_time, end_time, url, cont)
+
+    def create_label_and_button(self, text, url, row, alarm_index, start_time):
+        label = Label(self.master, text=text, 
+                anchor='w', relief='ridge', width=40, height=2, font=Main.D_FONT)
+        label.grid(column=0, row=row, pady=Main.PADY, padx=Main.PADX)
+        alarm = Alarm(label, alarm_index, self.enabled_list, start_time)
+        alarm.start()
+
+        btn_stop_alarm = Button(self.master, text='Stop', font=Main.D_FONT,
+            width=5, height=2, command = partial(self.clicked_btn_stop_alarm, alarm_index, self.enabled_list))
+        btn_stop_alarm.grid(column=1, row=row, pady=Main.PADY, padx=Main.PADX)
+
+        btn_open_zoom = Button(self.master, text='Open', font=Main.D_FONT,
+            width=5, height=2, command = partial(self.clicked_btn_open_zoom, url))
+        btn_open_zoom.grid(column=2, row=row, pady=Main.PADY, padx=Main.PADX)
+
 
     def clicked_btn_stop_alarm(self, index, enabled_list):
         print(f'stop: {index}')

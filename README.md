@@ -26,14 +26,11 @@ $ python -m venv venv
 $ ./venv/Scripts/activate.ps1
 ```
 
-> `venv/pyvenv.cfg`파일을 열고 `include-system-site-packages` 필드를 `true`로 바꾸어 주어야 함. (`python-dev-tools`설치를 위해.)
-
-
 
 ### STEP2. 필요한 dependency 설치
 
 ```bash
-(venv) $ pip install pyinstaller
+(venv) $ pip install -r requirements.txt
 ```
 
 
@@ -43,7 +40,7 @@ $ ./venv/Scripts/activate.ps1
 아래의 스크립트 실행하면 `dist` 폴더에 exe파일이 생성됨 
 
 ```bash
-(venv) $ pyinstaller --onefile --noconsole --clean proto.py
+(venv) $ pyinstaller --onefile --noconsole --name ClassHelper --clean .\class_helper.py
 ```
 
 

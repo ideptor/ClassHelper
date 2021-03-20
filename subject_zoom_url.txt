@@ -1,4 +1,5 @@
 국어,http://www.google.com
-영어,zoom url 2
-도덕,zoom url 2
+영어,http://www.daum.net
 컴터,http://www.naver.com
+조회,http://www.msn.com
+종례,http://github.com
