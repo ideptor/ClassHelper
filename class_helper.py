@@ -7,6 +7,19 @@ import time
 import threading
 import datetime
 import data_loader as loader
+from playsound import playsound
+
+
+class PlaySoud(threading.Thread):
+
+    def __init__(self, repeat):
+        super().__init__()
+        self.repeat = repeat
+
+    def run(self):
+        for i in range(self.repeat):
+            playsound('beep_1s.mp3')
+
 
 class Alarm(threading.Thread):
 
@@ -14,7 +27,8 @@ class Alarm(threading.Thread):
     DEFAULT_COLOR = 'SystemButtonFace'
     ALARM_INTERVAL = 0.6
     
-    ALARM_DURATUIN_SEC = 5 * 60
+    ALARM_BLINK_DURATION_SEC = 5 * 60
+    ALARM_PLAY_SOUND_DURATION_SEC = 5
 
     def __init__(self, label, index, enabled_list, start_time):
         super().__init__()
@@ -24,6 +38,15 @@ class Alarm(threading.Thread):
         self.enabled_list = enabled_list
         self.start_hour = int(start_time[0:2])
         self.start_min = int(start_time[3:5])
+        self.played = False 
+
+        if self.start_min >= 2:
+            self.start_min -= 2
+        else:
+            self.start_hour -= 1
+            self.start_min += 58
+
+
         print( self.start_hour, self.start_min)
     
 
@@ -37,10 +60,15 @@ class Alarm(threading.Thread):
                 start = now.replace(hour=self.start_hour, minute=self.start_min, second=0)
                 diff_seconds = (now - start).total_seconds()
                 
-                if diff_seconds < 0 or diff_seconds >= Alarm.ALARM_DURATUIN_SEC:
+                if diff_seconds < 0 or diff_seconds >= Alarm.ALARM_BLINK_DURATION_SEC:
                     time.sleep(Alarm.ALARM_INTERVAL)
                     continue
                     
+                if diff_seconds > 0 and self.played == False:
+                    play = PlaySoud(5)
+                    play.start()
+                    self.played = True
+
                 if cur_col == Alarm.ALARM_COLOR:
                     cur_col = Alarm.DEFAULT_COLOR
                 else:
@@ -149,6 +177,7 @@ class Main(Frame):
         label = Label(self.master, text=text, 
                 anchor='w', relief='ridge', width=40, height=2, font=Main.D_FONT)
         label.grid(column=0, row=row, pady=Main.PADY, padx=Main.PADX)
+
         alarm = Alarm(label, alarm_index, self.enabled_list, start_time)
         alarm.start()
 

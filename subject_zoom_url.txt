@@ -1,5 +1,12 @@
-국어,http://www.google.com
-영어,http://www.daum.net
-컴터,http://www.naver.com
-조회,http://www.msn.com
-종례,http://github.com
+조회,https://us02web.zoom.us/j/84293127785?pwd=TDU0dHM1VnRmcW9DNFFkaWJlQ2YvQT09
+국어,https://zoom.us/j/5015780466?pwd=VFVZWnpiRi9lRTVOTm9OTVRWRlpuUT09
+수학,https://us02web.zoom.us/j/84293127785?pwd=TDU0dHM1VnRmcW9DNFFkaWJlQ2YvQT09
+역사,https://zoom.us/j/6582973052?pwd=a2N2N2JqTFlZcXJWckZBUysrQjYrZz09#success
+과학,https://zoom.us/j/5914812832?pwd=bTg0eTZQK3NXK3FkKzFhT29nYi9JZz09
+종례,https://us02web.zoom.us/j/84293127785?pwd=TDU0dHM1VnRmcW9DNFFkaWJlQ2YvQT09
+체육,https://us02web.zoom.us/j/5969943294?pwd=TThHRTZmZE1EV0p5a0h2aGpnL3ZJdz09
+독서,https://zoom.us/j/4454577002?pwd=UnJnb2VNRzNPbDFUV0FxaDFiZEtYQT09
+미술,https://zoom.us/j/99886684184?pwd=Wkdra29vOHhOby9OVHM2SkNzckZMUT09#success
+사회,https://zoom.us/j/3661838686?pwd=SDl2UEpRcXcyeTJmVFdCQ0IwNklzZz09
+일어,https://zoom.us/j/8414399367?pwd=UHlwQzBJa3k5VEt4N3pKREczUjFFZz09
+기가,https://zoom.us/j/3613547414?pwd=M0xsTjJReXVFVFFrZWFydmFkbGxDdz09 
